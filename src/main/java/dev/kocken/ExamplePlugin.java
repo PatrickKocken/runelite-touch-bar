@@ -1,4 +1,4 @@
-package com.example;
+package dev.kocken;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;

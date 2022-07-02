@@ -1,4 +1,4 @@
-package com.example;
+package dev.kocken;
 
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;

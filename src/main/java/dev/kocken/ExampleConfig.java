@@ -1,4 +1,4 @@
-package com.example;
+package dev.kocken;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
