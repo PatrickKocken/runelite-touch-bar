@@ -6,10 +6,9 @@ import dev.kocken.nativebridge.item.TouchBarItem;
 import dev.kocken.nativebridge.item.view.TouchBarButton;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,95 +16,97 @@ public class TouchBarManager {
 
     private static final int TAB_BUTTONS_COUNT = 7;
 
-    private boolean isTopRowActive = true;
-
     private final JavaTouchBar touchBar;
 
     private final List<TouchBarButton> tabButtons = new ArrayList<>();
     private final List<TouchBarItem> tabItems = new ArrayList<>();
 
+    private boolean isTopRowActive = true;
     private final Robot robot;
-
-
-    private final Map<String, Integer> topRowButtonsConfiguration = new LinkedHashMap<String, Integer>() {{
-        put("combat", KeyEvent.VK_F1);
-        put("skills", KeyEvent.VK_F2);
-        put("quests", KeyEvent.VK_F3);
-        put("inventory", KeyEvent.VK_ESCAPE);
-        put("equipment", KeyEvent.VK_F4);
-        put("prayer", KeyEvent.VK_F5);
-        put("spellbook", KeyEvent.VK_F6);
-    }};
-
-    private final Map<String, Integer> bottomRowButtonsConfiguration = new LinkedHashMap<String, Integer>() {{
-        put("chat", KeyEvent.VK_F7);
-        put("friends", KeyEvent.VK_F8);
-        put("account", KeyEvent.VK_F9);
-        put("logout", null);
-        put("settings", KeyEvent.VK_F10);
-        put("emotes", KeyEvent.VK_F11);
-        put("music", KeyEvent.VK_F12);
-    }};
 
     public TouchBarManager() throws AWTException {
         this.touchBar = new JavaTouchBar();
         this.robot = new Robot();
+
         InitializeTabButtons();
+        SetTabButtons();
     }
 
+    /**
+     * Method for re-setting TabItems and (re-)rendering the TouchBar on all the Frames
+     */
     public void RenderTouchBar() {
-
         touchBar.setItems(tabItems);
 
         for (Frame frame : Frame.getFrames())
             touchBar.show(frame);
     }
 
+    /**
+     * Method for switching which tab row is active and setting the new tab buttons
+     */
     private void SwitchRows() {
         isTopRowActive = !isTopRowActive;
         SetTabButtons();
     }
 
+    /**
+     * Method for Initializing empty TouchBarButtons and adding them to a TouchBarItem
+     */
     private void InitializeTabButtons() {
-
         for (int i = 0; i < TAB_BUTTONS_COUNT; i++) {
             tabButtons.add(new TouchBarButton());
             tabItems.add(new TouchBarItem(String.valueOf(i), tabButtons.get(i)));
         }
-
-        TouchBarButton rowSwitchButton = new TouchBarButton();
-        rowSwitchButton.setTitle("↕︎");
-        rowSwitchButton.setAction(view -> SwitchRows());
-
-        tabItems.add(new TouchBarItem("switch", rowSwitchButton));
-
-        SetTabButtons();
     }
 
-
+    /**
+     * Method for setting the variables of the existing TouchBarButton using a TouchBarConfiguration
+     */
     private void SetTabButtons() {
-
-        Map<String, Integer> configuration = isTopRowActive ? topRowButtonsConfiguration : bottomRowButtonsConfiguration;
+        Map<String, Integer> configuration = isTopRowActive ? TouchBarConfiguration.topRowButtonsConfiguration() : TouchBarConfiguration.bottomRowButtonsConfiguration();
 
         int index = 0;
         for (Map.Entry<String, Integer> entry : configuration.entrySet()) {
-            String iconName = entry.getKey();
+            String imageName = entry.getKey();
             Integer keyCode = entry.getValue();
 
-            try {
-                tabButtons.get(index).setImage(new Image(getClass().getClassLoader().getResourceAsStream(String.format("images/%s.png", iconName))));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            tabButtons.get(index).setAction(view -> {
-                if (keyCode != null)
-                    robot.keyPress(keyCode);
-            });
-
+            tabButtons.get(index).setImage(loadButtonImage(imageName));
+            tabButtons.get(index).setAction(view -> robot.keyPress(keyCode));
             index += 1;
         }
 
+        tabItems.add(new TouchBarItem("switch", CreateSwitchRowButton()));
         RenderTouchBar();
     }
+
+    /**
+     * Loads the image for a TouchBarButton
+     *
+     * @param imageName the name of the png image in the resources/images directory
+     * @return returns the TouchBar Button Image
+     */
+    private Image loadButtonImage(String imageName) {
+        Image image = null;
+        try {
+            InputStream imageStream = getClass().getClassLoader().getResourceAsStream(String.format("images/%s.png", imageName));
+            image = new Image(imageStream);
+        } catch (IOException error) {
+            error.printStackTrace();
+        }
+        return image;
+    }
+
+    /**
+     * Method for creating a TouchBarButton that switches the active row
+     * @return returns TouchBarButton for switching the active row
+     */
+    private TouchBarButton CreateSwitchRowButton() {
+        TouchBarButton switchRowButton = new TouchBarButton();
+        switchRowButton.setTitle("↕︎");
+        switchRowButton.setAction(view -> SwitchRows());
+
+        return switchRowButton;
+    }
+
 }
