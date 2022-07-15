@@ -33,13 +33,21 @@ public class TouchBarManager {
     }
 
     /**
-     * Method for re-setting TabItems and (re-)rendering the TouchBar on all the Frames
+     * Method for re-setting TabItems and showing the TouchBar on all the Frames
      */
-    public void RenderTouchBar() {
+    public void ShowTouchBar() {
         touchBar.setItems(tabItems);
 
         for (Frame frame : Frame.getFrames())
             touchBar.show(frame);
+    }
+
+    /**
+     * Method for hiding the TouchBar on all the Frames
+     */
+    public void HideTouchBar() {
+        for (Frame frame : Frame.getFrames())
+            touchBar.hide(frame);
     }
 
     /**
@@ -77,7 +85,7 @@ public class TouchBarManager {
         }
 
         tabItems.add(new TouchBarItem("switch", CreateSwitchRowButton()));
-        RenderTouchBar();
+        ShowTouchBar();
     }
 
     /**
