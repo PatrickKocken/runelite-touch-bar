@@ -1,5 +1,6 @@
 package dev.kocken.touchbar;
 
+import dev.kocken.TouchBarPluginConfig;
 import dev.kocken.nativebridge.JavaTouchBar;
 import dev.kocken.nativebridge.common.Image;
 import dev.kocken.nativebridge.item.TouchBarItem;
@@ -16,17 +17,21 @@ public class TouchBarManager {
 
     private static final int TAB_BUTTONS_COUNT = 7;
 
+    private final TouchBarConfiguration touchBarConfig;
     private final JavaTouchBar touchBar;
+    private final Robot robot;
 
     private final List<TouchBarButton> tabButtons = new ArrayList<>();
     private final List<TouchBarItem> tabItems = new ArrayList<>();
 
+    private TouchBarPluginConfig config;
     private boolean isTopRowActive = true;
-    private final Robot robot;
 
-    public TouchBarManager() throws AWTException {
+    public TouchBarManager(TouchBarPluginConfig config) throws AWTException {
+        this.touchBarConfig = new TouchBarConfiguration();
         this.touchBar = new JavaTouchBar();
         this.robot = new Robot();
+        this.config = config;
 
         InitializeTabButtons();
         SetTabButtons();
@@ -66,13 +71,15 @@ public class TouchBarManager {
             tabButtons.add(new TouchBarButton());
             tabItems.add(new TouchBarItem(String.valueOf(i), tabButtons.get(i)));
         }
+
+        tabItems.add(new TouchBarItem("switch", CreateSwitchRowButton()));
     }
 
     /**
      * Method for setting the variables of the existing TouchBarButton using a TouchBarConfiguration
      */
     private void SetTabButtons() {
-        Map<String, Integer> configuration = isTopRowActive ? TouchBarConfiguration.topRowButtonsConfiguration() : TouchBarConfiguration.bottomRowButtonsConfiguration();
+        Map<String, Integer> configuration = isTopRowActive ? touchBarConfig.topRowButtonsConfiguration(config) : touchBarConfig.bottomRowButtonsConfiguration(config);
 
         int index = 0;
         for (Map.Entry<String, Integer> entry : configuration.entrySet()) {
@@ -83,8 +90,6 @@ public class TouchBarManager {
             tabButtons.get(index).setAction(view -> robot.keyPress(keyCode));
             index += 1;
         }
-
-        tabItems.add(new TouchBarItem("switch", CreateSwitchRowButton()));
         ShowTouchBar();
     }
 
@@ -107,6 +112,7 @@ public class TouchBarManager {
 
     /**
      * Method for creating a TouchBarButton that switches the active row
+     *
      * @return returns TouchBarButton for switching the active row
      */
     private TouchBarButton CreateSwitchRowButton() {
@@ -115,6 +121,16 @@ public class TouchBarManager {
         switchRowButton.setAction(view -> SwitchRows());
 
         return switchRowButton;
+    }
+
+    /**
+     * Method for updating the plugin config, setting the TouchBarButtons and showing the updated TouchBar
+     *
+     * @param config the updated config
+     */
+    public void UpdatePluginConfig(TouchBarPluginConfig config) {
+        this.config = config;
+        SetTabButtons();
     }
 
 }
