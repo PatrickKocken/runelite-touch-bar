@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 @Slf4j
 @PluginDescriptor(
-        name = "Touch Bar Plugin"
+        name = "Touch Bar"
 )
 public class TouchBarPlugin extends Plugin {
 
