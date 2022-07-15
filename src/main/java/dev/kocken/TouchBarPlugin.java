@@ -7,6 +7,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
@@ -25,12 +26,13 @@ public class TouchBarPlugin extends Plugin {
 
     @Override
     protected void startUp() throws Exception {
-        touchBarManager = new TouchBarManager();
+        touchBarManager = new TouchBarManager(config);
         log.info("Touch Bar Plugin started!");
     }
 
     @Override
     protected void shutDown() {
+        touchBarManager.HideTouchBar();
         log.info("Touch Bar Plugin stopped!");
     }
 
@@ -48,5 +50,10 @@ public class TouchBarPlugin extends Plugin {
     @Provides
     TouchBarPluginConfig provideConfig(ConfigManager configManager) {
         return configManager.getConfig(TouchBarPluginConfig.class);
+    }
+
+    @Subscribe
+    public void onConfigChanged(ConfigChanged newConfig){
+        touchBarManager.UpdatePluginConfig(config);
     }
 }

@@ -1,36 +1,33 @@
 package dev.kocken.touchbar;
 
-import java.awt.event.KeyEvent;
+import dev.kocken.TouchBarPluginConfig;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class TouchBarConfiguration {
+public class TouchBarConfiguration {
 
-    private TouchBarConfiguration() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static Map<String, Integer> topRowButtonsConfiguration(){
+    public Map<String, Integer> topRowButtonsConfiguration(TouchBarPluginConfig config){
         return new LinkedHashMap<String, Integer>() {{
-            put("combat", KeyEvent.VK_F1);
-            put("skills", KeyEvent.VK_F2);
-            put("quests", KeyEvent.VK_F3);
-            put("inventory", KeyEvent.VK_ESCAPE);
-            put("equipment", KeyEvent.VK_F4);
-            put("prayer", KeyEvent.VK_F5);
-            put("spellbook", KeyEvent.VK_F6);
+            put("combat", config.combat().getKeyCode());
+            put("skills", config.skills().getKeyCode());
+            put("quests", config.quests().getKeyCode());
+            put("inventory", config.inventory().getKeyCode());
+            put("equipment", config.equipment().getKeyCode());
+            put("prayer", config.prayer().getKeyCode());
+            put("spellbook", config.magic().getKeyCode());
         }};
     }
 
-    public static Map<String, Integer> bottomRowButtonsConfiguration(){
+    public Map<String, Integer> bottomRowButtonsConfiguration(TouchBarPluginConfig config){
         return new LinkedHashMap<String, Integer>() {{
-            put("chat", KeyEvent.VK_F7);
-            put("friends", KeyEvent.VK_F8);
-            put("account", KeyEvent.VK_F9);
-            put("logout", null);
-            put("settings", KeyEvent.VK_F10);
-            put("emotes", KeyEvent.VK_F11);
-            put("music", KeyEvent.VK_F12);
+            put("chat", config.chat().getKeyCode());
+            put("friends", config.friends().getKeyCode());
+            put("account", config.account().getKeyCode());
+            put("logout", config.logout().getKeyCode());
+            put("settings", config.settings().getKeyCode());
+            put("emotes", config.emotes().getKeyCode());
+            put("music", config.music().getKeyCode());
         }};
     }
 }
