@@ -33,12 +33,13 @@ jobs:
           new_branch: github-actions/update-native-library
           
       - name: Create pull request with library
-        uses: peter-evans/create-pull-request@v4
+        uses: devops-infra/action-pull-request@v0.5.0
         with:
-          base: master
-          commit-message: Update report
-          branch: github-actions/update-native-library
-          delete-branch: true
-          title: '[Github Actions] Update native library'
-          assignees: PatrickKocken
-          reviewers: PatrickKocken
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: github-actions/update-native-library
+          target_branch: master
+          reviewer: patrickkocken
+          assignee: patrickkocken
+          get_diff: true
+          ignore_users: "dependabot"
+          allow_no_diff: true
