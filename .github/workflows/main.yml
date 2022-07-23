@@ -25,9 +25,21 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Commit and push library
-        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        uses: EndBug/add-and-commit@v9
         with:
           add: '.'
           default_author: github_actions
           message: 'Update native library'
           new_branch: github-actions/update-native-library
+          
+      - name: Create pull request with library
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Update report
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: github-actions/update-native-library
+          delete-branch: true
+          title: '[Github Actions] Update native library'
+          assignees: PatrickKocken
+          reviewers: PatrickKocken
