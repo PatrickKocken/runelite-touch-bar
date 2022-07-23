@@ -35,10 +35,8 @@ jobs:
       - name: Create pull request with library
         uses: peter-evans/create-pull-request@v4
         with:
-          base: development
+          base: master
           commit-message: Update report
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           branch: github-actions/update-native-library
           delete-branch: true
           title: '[Github Actions] Update native library'
