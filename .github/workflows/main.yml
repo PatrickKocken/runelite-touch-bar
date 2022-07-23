@@ -1,0 +1,20 @@
+name: Update Native Library
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-native-Library:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Download latest release
+        uses: dsaltares/fetch-gh-release-asset@1.0.0
+        with:
+          repo: 'PatrickKocken/runelite-touch-bar-native-library'
+          version: 'latest release'
+          file: 'libJavaTouchBar.dylib'
+          token: ${{ secrets.GITHUB_TOKEN }}
