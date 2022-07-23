@@ -35,6 +35,7 @@ jobs:
       - name: Create pull request with library
         uses: peter-evans/create-pull-request@v4
         with:
+          base: development
           commit-message: Update report
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
