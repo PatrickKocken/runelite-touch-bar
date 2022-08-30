@@ -29,18 +29,20 @@ jobs:
           
       - name: Check checksum output
         run: |
-            unzip checksum.zip
-            unzip libJavaTouchBar.zip
+            unzip checksum.zip && rm checksum.zip
+            unzip libJavaTouchBar.zip && rm libJavaTouchBar.zip
             cat checksum.txt
             shasum -a 512 libJavaTouchBar.dylib
             shasum -a 512 -c checksum.txt
         
-      - name: Remove old release
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: src/main/resources/lib/libJavaTouchBar.dylib
+      - name: Update native library release
+        run: |
+            rm src/main/resources/lib/libJavaTouchBar.dylib
+            rm src/main/resources/lib/checksum.txt
+            mv libJavaTouchBar.dylib src/main/resources/lib/
+            mv checksum.txt src/main/resources/lib/
         
-      - name: Commit and push library
+      - name: Commit and push new native library
         uses: EndBug/add-and-commit@v9
         with:
           add: '.'
@@ -48,7 +50,7 @@ jobs:
           message: 'Update native library'
           new_branch: github-actions/update-native-library
           
-      - name: Create pull request with library
+      - name: Create pull request with new native library
         uses: devops-infra/action-pull-request@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
