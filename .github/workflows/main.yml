@@ -29,7 +29,6 @@ jobs:
         run: |
             OUTPUT=$(shasum -a 512 -c checksum.txt)
             echo $OUTPUT
-        if: ${{OUTPUT == "libJavaTouchBar.dylib: OK"}}
         
       - name: Remove old release
         uses: JesseTG/rm@v1.0.3
