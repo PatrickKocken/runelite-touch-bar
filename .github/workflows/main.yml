@@ -16,7 +16,8 @@ jobs:
         with:
           repo: PatrickKocken/runelite-touch-bar-native-library
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifact_name: libJavaTouchBar.zip
+          artifact_name: libJavaTouchBar.dylib
+          rename: libJavaTouchBar.zip
           
       - name: Download native library checksum artifact
         uses: bettermarks/action-artifact-download@0.3.0
@@ -39,14 +40,6 @@ jobs:
         with:
           path: src/main/resources/lib/libJavaTouchBar.dylib
         
-      - name: Download latest release
-        uses: dsaltares/fetch-gh-release-asset@1.0.0
-        with:
-          repo: 'PatrickKocken/runelite-touch-bar-native-library'
-          file: 'libJavaTouchBar.dylib'
-          target: 'src/main/resources/lib/libJavaTouchBar.dylib'
-          token: ${{ secrets.GITHUB_TOKEN }}
-          
       - name: Commit and push library
         uses: EndBug/add-and-commit@v9
         with:
