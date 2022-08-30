@@ -16,7 +16,7 @@ jobs:
         with:
           repo: PatrickKocken/runelite-touch-bar-native-library
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifact_name: libJavaTouchBar.dylib
+          artifact_name: libJavaTouchBar.zip
           
       - name: Download native library checksum artifact
         uses: bettermarks/action-artifact-download@0.3.0
@@ -29,7 +29,9 @@ jobs:
       - name: Check checksum output
         run: |
             unzip checksum.zip
+            unzip libJavaTouchBar.zip
             cat checksum.txt
+            shasum -a 512 libJavaTouchBar.dylib
             shasum -a 512 -c checksum.txt
         
       - name: Remove old release
