@@ -27,7 +27,7 @@ jobs:
           
       - name: Check checksum output
         run: |
-            ls
+            cat checksum.txt
             shasum -a 512 -c checksum.txt
         
       - name: Remove old release
