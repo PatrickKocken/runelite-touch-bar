@@ -11,6 +11,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         
+      - name: Download native library artifact
+        uses: bettermarks/action-artifact-download@0.3.0
+        with:
+          repo: PatrickKocken/runelite-touch-bar-native-library
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_name: libJavaTouchBar.dylib
+          
+      - name: Download native library checksum artifact
+        uses: bettermarks/action-artifact-download@0.3.0
+        with:
+          repo: PatrickKocken/runelite-touch-bar-native-library
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_name: checksum.txt
+          
+      - name: Check checksum output
+        run: |
+            OUTPUT=$(shasum -a 512 -c checksum.txt)
+            echo $OUTPUT
+        if: ${{OUTPUT == "libJavaTouchBar.dylib: OK"}}
+        
       - name: Remove old release
         uses: JesseTG/rm@v1.0.3
         with:
