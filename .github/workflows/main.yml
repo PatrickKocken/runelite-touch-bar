@@ -24,9 +24,11 @@ jobs:
           repo: PatrickKocken/runelite-touch-bar-native-library
           token: ${{ secrets.GITHUB_TOKEN }}
           artifact_name: checksum.txt
+          rename: checksum.zip
           
       - name: Check checksum output
         run: |
+            unzip checksum.zip
             cat checksum.txt
             shasum -a 512 -c checksum.txt
         
