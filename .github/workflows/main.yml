@@ -27,8 +27,8 @@ jobs:
           
       - name: Check checksum output
         run: |
-            OUTPUT=$(shasum -a 512 -c checksum.txt)
-            echo $OUTPUT
+            ls
+            shasum -a 512 -c checksum.txt
         
       - name: Remove old release
         uses: JesseTG/rm@v1.0.3
