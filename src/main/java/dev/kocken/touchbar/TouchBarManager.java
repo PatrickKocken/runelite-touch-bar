@@ -33,7 +33,6 @@ public class TouchBarManager {
         this.robot = new Robot();
         this.config = config;
 
-
         InitializeTabButtons();
         SetTabButtons();
     }

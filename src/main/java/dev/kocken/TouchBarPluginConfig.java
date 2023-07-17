@@ -11,7 +11,7 @@ public interface TouchBarPluginConfig extends Config {
     String KEYBINDING_NAME = "Key binding";
     String ORDER_NAME = "Touchbar Order";
     String TOOLBAR_POSITION_DESCRIPTION = "The order in which this tab appears in the touchbar. (" + TOOLBAR_ORDER_MIN + "-" + TOOLBAR_ORDER_MAX + ")";
-    String OPTION_KEY_DESCRIPTION = "The shortcut which opens this tab. This must match the Runescape keybinds.";
+    String OPTION_KEY_DESCRIPTION = "The shortcut which opens this tab. This must match the Runescape keybindings.";
 
     int GROUP_POSITION_KEY_BINDING = 0;
     int GROUP_POSITION_ORDER = 1;
