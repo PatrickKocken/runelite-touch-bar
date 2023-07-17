@@ -9,15 +9,15 @@ public interface TouchBarPluginConfig extends Config {
     int TOOLBAR_ORDER_MAX = 13;
     
     String KEYBINDING_NAME = "Key binding";
-    String ORDER_NAME = "Touchbar Order";
+    String ORDER_NAME = "Touchbar order";
     String TOOLBAR_POSITION_DESCRIPTION = "The order in which this tab appears in the touchbar. (" + TOOLBAR_ORDER_MIN + "-" + TOOLBAR_ORDER_MAX + ")";
     String OPTION_KEY_DESCRIPTION = "The shortcut which opens this tab. This must match the Runescape keybindings.";
 
     int GROUP_POSITION_KEY_BINDING = 0;
     int GROUP_POSITION_ORDER = 1;
 
-    @ConfigSection(name = "Combat", description = "Combat tab", position = 0)
-    String combatSection = "Combat";
+    @ConfigSection(name = "Combat Options", description = "Combat tab", position = 0)
+    String combatSection = "Combat Options";
 
     @ConfigItem(keyName = "combat", name = KEYBINDING_NAME, description = OPTION_KEY_DESCRIPTION, section = combatSection, position=GROUP_POSITION_KEY_BINDING)
     default KeyBindings combat() {
@@ -44,8 +44,8 @@ public interface TouchBarPluginConfig extends Config {
         return 1;
     }
 
-    @ConfigSection(name = "Quests", description = "Quests tab", position = 2)
-    String questsSection = "Quests";
+    @ConfigSection(name = "Quest List", description = "Quest List", position = 2)
+    String questsSection = "Quest List";
 
     @ConfigItem(keyName = "quests", name = KEYBINDING_NAME, description = OPTION_KEY_DESCRIPTION, section = questsSection, position = GROUP_POSITION_KEY_BINDING)
     default KeyBindings quests() {
@@ -72,8 +72,8 @@ public interface TouchBarPluginConfig extends Config {
         return 3;
     }
 
-    @ConfigSection(name = "Equipment", description = "Equipment tab", position = 4)
-    String equipmentSection = "Equipment";
+    @ConfigSection(name = "Worn Equipment", description = "Worn Equipment tab", position = 4)
+    String equipmentSection = "Worn Equipment";
 
     @ConfigItem(keyName = "equipment", name = KEYBINDING_NAME, description = OPTION_KEY_DESCRIPTION, section = equipmentSection, position = GROUP_POSITION_KEY_BINDING)
     default KeyBindings equipment() {
@@ -198,8 +198,8 @@ public interface TouchBarPluginConfig extends Config {
         return 12;
     }
 
-    @ConfigSection(name = "Music", description = "Music tab", position = 13)
-    String musicSection = "Music";
+    @ConfigSection(name = "Music Player", description = "Music Player tab", position = 13)
+    String musicSection = "Music Player";
 
     @ConfigItem(keyName = "music", name = KEYBINDING_NAME, description = OPTION_KEY_DESCRIPTION, section = musicSection, position = GROUP_POSITION_KEY_BINDING)
     default KeyBindings music() {
