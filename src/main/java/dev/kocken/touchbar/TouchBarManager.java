@@ -10,14 +10,15 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TouchBarManager {
 
     private static final int TAB_BUTTONS_COUNT = 7;
 
-    private final TouchBarConfiguration touchBarConfig;
     private final JavaTouchBar touchBar;
     private final Robot robot;
 
@@ -28,7 +29,6 @@ public class TouchBarManager {
     private boolean isTopRowActive = true;
 
     public TouchBarManager(TouchBarPluginConfig config) throws AWTException {
-        this.touchBarConfig = new TouchBarConfiguration();
         this.touchBar = new JavaTouchBar();
         this.robot = new Robot();
         this.config = config;
@@ -79,18 +79,32 @@ public class TouchBarManager {
      * Method for setting the variables of the existing TouchBarButton using a TouchBarConfiguration
      */
     private void SetTabButtons() {
-        Map<String, Integer> configuration = isTopRowActive ? touchBarConfig.topRowButtonsConfiguration(config) : touchBarConfig.bottomRowButtonsConfiguration(config);
+        List<Tabs> tabOrder = getTabOrder();
+        int startingIndex = isTopRowActive ? 0 : TAB_BUTTONS_COUNT;
+        for(int i = 0; i < TAB_BUTTONS_COUNT; i++) {
+            int tabNumber = startingIndex + i;
+            Tabs tab = tabOrder.get(tabNumber);
+            int keyCode = tab.getKeyBindingUsingConfig(config).getKeyCode();
 
-        int index = 0;
-        for (Map.Entry<String, Integer> entry : configuration.entrySet()) {
-            String imageName = entry.getKey();
-            Integer keyCode = entry.getValue();
-
-            tabButtons.get(index).setImage(loadButtonImage(imageName));
-            tabButtons.get(index).setAction(view -> robot.keyPress(keyCode));
-            index += 1;
+            TouchBarButton button = tabButtons.get(i);
+            button.setImage(loadButtonImage(tab.imageName));
+            button.setAction(view -> robot.keyPress(keyCode));
         }
         ShowTouchBar();
+    }
+
+    /**
+     * Calculates the tab order according to the user's configuration.
+     *
+     * @return A list of Tabs in the user's configured order.
+     */
+    private List<Tabs> getTabOrder() {
+        // Take the list of tabs
+        return Stream.of(Tabs.values())
+                // Sort them by their config order
+                .sorted(Comparator.comparingInt((tab) -> tab.getOrderUsingConfig(this.config)))
+                // and collect them into a list.
+                .collect(Collectors.toList());
     }
 
     /**
@@ -132,5 +146,4 @@ public class TouchBarManager {
         this.config = config;
         SetTabButtons();
     }
-
 }
